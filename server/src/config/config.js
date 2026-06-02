@@ -1,7 +1,10 @@
-const dotenv = require('dotenv')
-dotenv.config({
-  path: process.env.NODE_ENV === "production" ? ".env.production" : ".env",
-});
+// const dotenv = require('dotenv')
+// dotenv.config({
+//   path: process.env.NODE_ENV === "production" ? ".env.production" : ".env",
+// });
+import dotenv from "dotenv";
+dotenv.config();
+
 
 module.exports = {
   development: {
