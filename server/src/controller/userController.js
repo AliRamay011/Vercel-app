@@ -8,9 +8,10 @@ dotenv.config({
 
 export const CreateUser = async (req, res) => {
   try {
-    const { id , name, phone, address, plan_id, registration_date, area } = req.body;
+    const { id, name, phone, address, plan_id, registration_date, area } =
+      req.body;
 
-    console.log("Creating user with plan_id:", plan_id , id); // Debug
+    console.log("Creating user with plan_id:", plan_id, id); // Debug
 
     if (
       !name ||
@@ -48,8 +49,8 @@ export const CreateUser = async (req, res) => {
     console.log("Plan found:", planRecord.id, planRecord.name); // Debug
 
     // Create user
+    console.log(id);
     const newUser = await customers.create({
-      id,
       name,
       phone,
       address,
@@ -60,7 +61,8 @@ export const CreateUser = async (req, res) => {
     });
 
     console.log("User created:", newUser.id); // Debug
-
+    console.log("RAW USER:", JSON.stringify(newUser, null, 2));
+    console.log("USER JSON:", newUser.toJSON());
     // Generate invoice using RAW QUERY ONLY
     const invoice_number = `INV-${Date.now()}-${Math.random()
       .toString(36)
@@ -70,6 +72,8 @@ export const CreateUser = async (req, res) => {
     due_date.setMonth(due_date.getMonth() + 1);
 
     // USE ONLY RAW QUERY - Sequelize create() use mat karo
+    console.log("newUser.id =", newUser?.id);
+    console.log("planRecord.id =", planRecord?.id); 
     console.log({
       invoice_number,
       userId: newUser?.id,
