@@ -12,12 +12,12 @@ export const CreateUser = async (req, res) => {
 
     console.log("Creating user with plan_id:", plan_id); // Debug
 
-    // if (!name || !phone || !address || !plan_id) {
-    //   return res.status(400).json({
-    //     success: false,
-    //     message: "Required fields missing",
-    //   });
-    // }
+  if (!name || !phone || !address || !plan_id || !area) {
+      return res.status(400).json({
+        success: false,
+        message: "Required fields missing",
+      });
+    }
 
     // Check phone
     const existingPhone = await customers.findOne({ where: { phone } });
