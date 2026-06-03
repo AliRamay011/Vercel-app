@@ -13,12 +13,13 @@ export const CreateUser = async (req, res) => {
     console.log("Creating user with plan_id:", plan_id); // Debug
 
  if (!name || !phone || !address || !plan_id || !area) {
+      console.log(name ,phone, address ,plan_id ,  area)
       return res.status(400).json({
         success: false,
         message: "Required fields missing",
       });
-      console.log(name ,phone, address ,plan_id ,  area)
     }
+
 
 
     // Check phone
