@@ -74,6 +74,40 @@ export const CreatePlans = async (req, res) => {
   }
 };
 
+export const GetPlans = async (req, res) => {
+  try {
+    // Fetch all plans
+    const allPlans = await plans.findAll({
+      attributes: [
+        "id",
+        "name",
+        "price",
+        "speed",
+        "data_limit",
+        "description",
+        "status",
+
+        "created_at",
+      ],
+      order: [["created_at", "DESC"]],
+    });
+
+    // Return response
+    return res.status(200).json({
+      success: true,
+      message: "Plans fetched successfully",
+      plans: allPlans,
+    });
+  } catch (error) {
+    console.error("Get Plans Error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};
+
 export const EditPlans = async (req, res) => {
   try {
     const { id } = req.params; // URL me plan id aayega, eg: /api/plans/:id
