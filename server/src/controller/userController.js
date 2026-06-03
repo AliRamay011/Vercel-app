@@ -60,7 +60,11 @@ export const CreateUser = async (req, res) => {
       status: "active",
     });
 
-    console.log("User created:", newUser.id); // Debug
+    const createdUser = await customers.findOne({
+      where: { phone },
+    });
+
+    console.log("Created User ID:", createdUser?.id);
     console.log("RAW USER:", JSON.stringify(newUser, null, 2));
     console.log("USER JSON:", newUser.toJSON());
     // Generate invoice using RAW QUERY ONLY
@@ -72,11 +76,11 @@ export const CreateUser = async (req, res) => {
     due_date.setMonth(due_date.getMonth() + 1);
 
     // USE ONLY RAW QUERY - Sequelize create() use mat karo
-    console.log("newUser.id =", newUser?.id);
-    console.log("planRecord.id =", planRecord?.id); 
+    console.log("createdUser.id =", createdUser?.id);
+    console.log("planRecord.id =", planRecord?.id);
     console.log({
       invoice_number,
-      userId: newUser?.id,
+      userId: createdUser?.id,
       planId: planRecord?.id,
       price: planRecord?.price,
       issue_date,
@@ -88,7 +92,7 @@ export const CreateUser = async (req, res) => {
       {
         replacements: [
           invoice_number,
-          newUser.id,
+          createdUser.id,
           planRecord.id,
           parseFloat(planRecord.price),
           0,
