@@ -9,6 +9,7 @@ dotenv.config({
 export const CreatePlans = async (req, res) => {
   try {
     const {
+      id,
       name,
       price,
       speed,
@@ -49,8 +50,11 @@ export const CreatePlans = async (req, res) => {
       description: description || null,
       status,
     });
-
-    console.log("Plan created successfully:", newPlan.id);
+   
+    const createdplans = await plans.findOne({
+      where: { name },
+    });
+    console.log("Plan created successfully:", createdplans.id);
 
     // -----------------------------
     // Response
@@ -62,40 +66,6 @@ export const CreatePlans = async (req, res) => {
     });
   } catch (error) {
     console.error("Create Plan Error:", error);
-    return res.status(500).json({
-      success: false,
-      message: "Internal server error",
-      error: error.message,
-    });
-  }
-};
-
-export const GetPlans = async (req, res) => {
-  try {
-    // Fetch all plans
-    const allPlans = await plans.findAll({
-      attributes: [
-        "id",
-        "name",
-        "price",
-        "speed",
-        "data_limit",
-        "description",
-        "status",
-
-        "created_at",
-      ],
-      order: [["created_at", "DESC"]],
-    });
-
-    // Return response
-    return res.status(200).json({
-      success: true,
-      message: "Plans fetched successfully",
-      plans: allPlans,
-    });
-  } catch (error) {
-    console.error("Get Plans Error:", error);
     return res.status(500).json({
       success: false,
       message: "Internal server error",
