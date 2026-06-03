@@ -8,11 +8,11 @@ dotenv.config({
 
 export const CreateUser = async (req, res) => {
   try {
-    const { name, phone, address, plan_id, registration_date, area } = req.body;
+    const { id , name, phone, address, plan_id, registration_date, area } = req.body;
 
     console.log("Creating user with plan_id:", plan_id); // Debug
 
-  if (
+    if (
       !name ||
       !phone ||
       !address ||
@@ -20,14 +20,12 @@ export const CreateUser = async (req, res) => {
       plan_id === null ||
       !area
     ) {
-      console.log(name ,phone, address ,plan_id ,  area)
+      console.log(name, phone, address, plan_id, area);
       return res.status(400).json({
         success: false,
         message: "Required fields missing",
       });
     }
-
-
 
     // Check phone
     const existingPhone = await customers.findOne({ where: { phone } });
@@ -51,6 +49,7 @@ export const CreateUser = async (req, res) => {
 
     // Create user
     const newUser = await customers.create({
+      id,
       name,
       phone,
       address,
@@ -71,6 +70,14 @@ export const CreateUser = async (req, res) => {
     due_date.setMonth(due_date.getMonth() + 1);
 
     // USE ONLY RAW QUERY - Sequelize create() use mat karo
+    console.log({
+      invoice_number,
+      userId: newUser?.id,
+      planId: planRecord?.id,
+      price: planRecord?.price,
+      issue_date,
+      due_date,
+    });
     await sequelize.query(
       `INSERT INTO invoices (invoice_number, customer_id, plan_id, amount, tax_amount, total_amount, issue_date, due_date, status, payment_method, created_at) 
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())`,
@@ -87,7 +94,7 @@ export const CreateUser = async (req, res) => {
           "pending",
           "cash",
         ],
-      }
+      },
     );
 
     console.log("Invoice created with raw query"); // Debug
@@ -186,7 +193,7 @@ export const DeleteUserById = async (req, res) => {
 export const EditUserById = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, email, phone, address, plan_id, status , area } = req.body;
+    const { name, email, phone, address, plan_id, status, area } = req.body;
 
     // Pehle check karo user exist karta hai ya nahi
     const user = await customers.findByPk(id);
@@ -235,7 +242,7 @@ export const EditUserById = async (req, res) => {
       },
       {
         where: { id },
-      }
+      },
     );
 
     // Updated user data get karo
