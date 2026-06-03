@@ -10,7 +10,7 @@ export const CreateUser = async (req, res) => {
   try {
     const { id , name, phone, address, plan_id, registration_date, area } = req.body;
 
-    console.log("Creating user with plan_id:", plan_id); // Debug
+    console.log("Creating user with plan_id:", plan_id , id); // Debug
 
     if (
       !name ||
