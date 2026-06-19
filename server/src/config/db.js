@@ -6,15 +6,20 @@ import initModels from "../models/initModels.js";
 // });
 dotenv.config();
 
-
 const config = {
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
- host: process.env.DB_HOST,
-  port: 3306,
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
   dialect: "mysql",
   logging: false,
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  },
   pool: { max: 10, min: 0, acquire: 30000, idle: 10000 },
 };
 
@@ -22,7 +27,7 @@ const sequelize = new Sequelize(
   config.database,
   config.username,
   config.password,
-  config
+  config,
 );
 
 // Database connection check
